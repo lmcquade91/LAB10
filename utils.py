@@ -43,4 +43,6 @@ class preprocessor(TransformerMixin, BaseEstimator):
         return self
 
     def transform(self, X):
-        return X.apply(clean_text).apply(convert_text)
+    if not isinstance(X, pd.Series):  # ✅ Ensure X is always a Pandas Series
+        X = pd.Series(X)
+    return X.apply(clean_text).apply(convert_text)
