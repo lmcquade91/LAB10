@@ -2,7 +2,13 @@ import os
 import streamlit as st
 import joblib
 import pandas as pd
-from utils import preprocessor  # Ensure utils.py is in the same GitHub repo
+import os
+import sys
+
+# Ensure the script can find utils.py
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+from utils import preprocessor  # ✅ This ensures it is imported correctly
 
 def run():
     # Load the trained sentiment analysis model from the same directory
