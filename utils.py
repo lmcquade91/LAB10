@@ -35,7 +35,7 @@ def convert_text(text):
 
 
 class preprocessor(TransformerMixin, BaseEstimator):
-
+    
     def __init__(self):
         pass
 
@@ -43,8 +43,9 @@ class preprocessor(TransformerMixin, BaseEstimator):
         return self
 
     def transform(self, X):
-    if not isinstance(X, pd.Series):  # ✅ Ensure X is always a Pandas Series
-        X = pd.Series(X)  # ✅ Correctly indented inside `if` block
+        if not isinstance(X, pd.Series):  # ✅ Ensure X is always a Pandas Series
+            X = pd.Series(X)  # ✅ Properly indented
 
-    return X.apply(clean_text).apply(convert_text)  # ✅ Correct indentation
+        return X.apply(clean_text).apply(convert_text)  # ✅ Indented correctly
+
 
