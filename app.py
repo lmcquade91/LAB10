@@ -1,6 +1,7 @@
 import os
 import streamlit as st
 import joblib
+import pandas as pd
 from utils import preprocessor  # Ensure utils.py is in the same GitHub repo
 
 def run():
@@ -18,7 +19,11 @@ def run():
     predicted_sentiment = ""
 
     if st.button("Predict"):
-        processed_text = preprocessor(userinput)
+        # Convert user input into a Pandas Series for compatibility
+        processed_text = pd.Series([userinput])
+        processed_text = preprocessor().transform(processed_text)[0]  # ✅ Fix: Apply transformation correctly
+
+        # Make a prediction
         predicted_sentiment = model.predict([processed_text])[0]
 
         output = 'positive 👍' if predicted_sentiment == 1 else 'negative 👎'
