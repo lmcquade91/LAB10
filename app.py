@@ -1,14 +1,13 @@
 import os
+import sys
 import streamlit as st
 import joblib
 import pandas as pd
-import os
-import sys
 
 # Ensure the script can find utils.py
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from utils import preprocessor  # ✅ This ensures it is imported correctly
+from utils import preprocessor  # ✅ This ensures utils.py is found
 
 def run():
     # Load the trained sentiment analysis model from the same directory
@@ -25,18 +24,17 @@ def run():
     if st.button("Predict"):
         if userinput.strip():  # Ensure input is not empty or just spaces
             try:
-                # Convert user input into a Pandas DataFrame (Ensures it has the right format)
+                # Convert user input into a Pandas Series
                 input_series = pd.Series([userinput])  # ✅ Ensure input is a Pandas Series
                 
-                # Create an instance of the preprocessor and apply transformation
-                preprocessor_instance = preprocessor()  # ✅ Fix: Create an instance of the class
+                # Apply preprocessing
+                preprocessor_instance = preprocessor()  # ✅ Create an instance of the preprocessor
                 processed_text_series = preprocessor_instance.transform(input_series)  # ✅ Apply transformation
                 
-                # Ensure processed_text_series is a Pandas Series
-                if isinstance(processed_text_series, pd.Series):
+                if isinstance(processed_text_series, pd.Series):  # ✅ Ensure output is a Series
                     processed_text = processed_text_series.iloc[0]  # ✅ Extract processed text
                 else:
-                    processed_text = str(processed_text_series)  # ✅ Convert to string if necessary
+                    processed_text = str(processed_text_series)  # ✅ Ensure it’s a string
                 
                 # Ensure input to model.predict() is a list
                 prediction_input = [processed_text]  # ✅ Convert to list format
