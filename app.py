@@ -19,16 +19,18 @@ def run():
     predicted_sentiment = ""
 
     if st.button("Predict"):
-        # Convert user input into a Pandas Series for compatibility
-        processed_text = pd.Series([userinput])
-        processed_text = preprocessor().transform(processed_text)[0]  # ✅ Fix: Apply transformation correctly
+        if userinput:  # Ensure input is not empty
+            # Convert user input into a Pandas Series for compatibility
+            input_series = pd.Series([userinput])  # ✅ Fix: Convert to Series
+            processed_text_series = preprocessor().transform(input_series)  # ✅ Fix: Apply transformation to Series
+            processed_text = processed_text_series.iloc[0]  # Extract transformed text
 
-        # Make a prediction
-        predicted_sentiment = model.predict([processed_text])[0]
+            # Make a prediction
+            predicted_sentiment = model.predict([processed_text])[0]
 
-        output = 'positive 👍' if predicted_sentiment == 1 else 'negative 👎'
-        sentiment = f'Predicted sentiment of \"{userinput}\" is {output}.'
-        st.success(sentiment)
+            output = 'positive 👍' if predicted_sentiment == 1 else 'negative 👎'
+            sentiment = f'Predicted sentiment of \"{userinput}\" is {output}.'
+            st.success(sentiment)
 
 if __name__ == "__main__":
     run()
