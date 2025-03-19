@@ -19,19 +19,20 @@ def run():
     if st.button("Predict"):
         if userinput.strip():  # Ensure input is not empty or just spaces
             try:
-                # Convert user input into a Pandas Series for compatibility
-                input_series = pd.Series([userinput])  # ✅ Ensure input is a Series
+                # Convert user input into a Pandas DataFrame (Ensures it has the right format)
+                input_series = pd.Series([userinput])  # ✅ Ensure input is a Pandas Series
                 
-                # Apply preprocessing
-                preprocessor_instance = preprocessor()  # ✅ Create an instance of the preprocessor
+                # Create an instance of the preprocessor and apply transformation
+                preprocessor_instance = preprocessor()  # ✅ Fix: Create an instance of the class
                 processed_text_series = preprocessor_instance.transform(input_series)  # ✅ Apply transformation
                 
-                if isinstance(processed_text_series, pd.Series):  # ✅ Ensure output is a Series
+                # Ensure processed_text_series is a Pandas Series
+                if isinstance(processed_text_series, pd.Series):
                     processed_text = processed_text_series.iloc[0]  # ✅ Extract processed text
                 else:
-                    processed_text = str(processed_text_series)  # ✅ Ensure it’s a string
+                    processed_text = str(processed_text_series)  # ✅ Convert to string if necessary
                 
-                # Ensure input to model.predict() is a list or array
+                # Ensure input to model.predict() is a list
                 prediction_input = [processed_text]  # ✅ Convert to list format
                 
                 # Make a prediction
