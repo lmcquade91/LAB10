@@ -7,9 +7,9 @@ import pandas as pd
 # Ensure the script can find utils.py
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from utils import preprocessor  # ✅ This ensures utils.py is found
+from utils import preprocessor  # ✅ Ensure utils.py is found
 
-def run():
+def run():  # ✅ Function starts here
     # Load the trained sentiment analysis model from the same directory
     model_path = os.path.join(os.path.dirname(__file__), "model.joblib")
     model = joblib.load(model_path)  # ✅ Correct path
@@ -21,7 +21,7 @@ def run():
     userinput = st.text_input('Enter text below, then click the Predict button.', placeholder='Input text HERE')
     st.text("")
 
-    if st.button("Predict"):
+    if st.button("Predict"):  # ✅ This block must be indented
         if userinput.strip():  # Ensure input is not empty or just spaces
             try:
                 # Convert user input into a Pandas Series
@@ -49,5 +49,5 @@ def run():
             except Exception as e:
                 st.error(f"An error occurred: {e}")  # ✅ Display a user-friendly error message
 
-if __name__ == "__main__":
-    run()
+if __name__ == "__main__":  # ✅ Main function starts here
+    run()  # ✅ This must be indented under the if-statement
