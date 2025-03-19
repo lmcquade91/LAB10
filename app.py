@@ -16,24 +16,33 @@ def run():
     userinput = st.text_input('Enter text below, then click the Predict button.', placeholder='Input text HERE')
     st.text("")
 
-    predicted_sentiment = ""
-
     if st.button("Predict"):
-        if userinput:  # Ensure input is not empty
-            # Convert user input into a Pandas Series for compatibility
-            input_series = pd.Series([userinput])  # ✅ Ensure input is a Series
-            processed_text_series = preprocessor().transform(input_series)  # ✅ Apply preprocessing
-            processed_text = processed_text_series.iloc[0]  # ✅ Extract text as string
+        if userinput.strip():  # Ensure input is not empty or just spaces
+            try:
+                # Convert user input into a Pandas Series for compatibility
+                input_series = pd.Series([userinput])  # ✅ Ensure input is a Series
+                
+                # Apply preprocessing
+                preprocessor_instance = preprocessor()  # ✅ Create an instance of the preprocessor
+                processed_text_series = preprocessor_instance.transform(input_series)  # ✅ Apply transformation
+                
+                if isinstance(processed_text_series, pd.Series):  # ✅ Ensure output is a Series
+                    processed_text = processed_text_series.iloc[0]  # ✅ Extract processed text
+                else:
+                    processed_text = str(processed_text_series)  # ✅ Ensure it’s a string
+                
+                # Ensure input to model.predict() is a list or array
+                prediction_input = [processed_text]  # ✅ Convert to list format
+                
+                # Make a prediction
+                predicted_sentiment = model.predict(prediction_input)[0]  # ✅ Ensure proper input format
 
-            # Ensure input to model.predict() is a list
-            prediction_input = [processed_text]  # ✅ Convert to list format
+                output = 'positive 👍' if predicted_sentiment == 1 else 'negative 👎'
+                sentiment = f'Predicted sentiment of \"{userinput}\" is {output}.'
+                st.success(sentiment)
 
-            # Make a prediction
-            predicted_sentiment = model.predict(prediction_input)[0]  # ✅ Ensure proper input format
-
-            output = 'positive 👍' if predicted_sentiment == 1 else 'negative 👎'
-            sentiment = f'Predicted sentiment of \"{userinput}\" is {output}.'
-            st.success(sentiment)
+            except Exception as e:
+                st.error(f"An error occurred: {e}")  # ✅ Display a user-friendly error message
 
 if __name__ == "__main__":
     run()
