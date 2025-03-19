@@ -21,12 +21,15 @@ def run():
     if st.button("Predict"):
         if userinput:  # Ensure input is not empty
             # Convert user input into a Pandas Series for compatibility
-            input_series = pd.Series([userinput])  # ✅ Fix: Convert to Series
-            processed_text_series = preprocessor().transform(input_series)  # ✅ Fix: Apply transformation to Series
-            processed_text = processed_text_series.iloc[0]  # Extract transformed text
+            input_series = pd.Series([userinput])  # ✅ Ensure input is a Series
+            processed_text_series = preprocessor().transform(input_series)  # ✅ Apply preprocessing
+            processed_text = processed_text_series.iloc[0]  # ✅ Extract text as string
+
+            # Ensure input to model.predict() is a list
+            prediction_input = [processed_text]  # ✅ Convert to list format
 
             # Make a prediction
-            predicted_sentiment = model.predict([processed_text])[0]
+            predicted_sentiment = model.predict(prediction_input)[0]  # ✅ Ensure proper input format
 
             output = 'positive 👍' if predicted_sentiment == 1 else 'negative 👎'
             sentiment = f'Predicted sentiment of \"{userinput}\" is {output}.'
