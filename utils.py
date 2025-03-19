@@ -44,5 +44,7 @@ class preprocessor(TransformerMixin, BaseEstimator):
 
     def transform(self, X):
     if not isinstance(X, pd.Series):  # ✅ Ensure X is always a Pandas Series
-        X = pd.Series(X)
-    return X.apply(clean_text).apply(convert_text)
+        X = pd.Series(X)  # ✅ Correctly indented inside `if` block
+
+    return X.apply(clean_text).apply(convert_text)  # ✅ Correct indentation
+
